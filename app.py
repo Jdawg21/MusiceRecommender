@@ -165,6 +165,7 @@ def main():
     username = st.text_input("Whats your name?")
     
     if username == 'devtesterMARCauthenticcationPaSSworDLJJR':
+        st.info("Suppp")
         df = pd.read_csv("datasets/user-review.csv")
         def filedownload(df):
             csv = df.to_csv(index=False)
@@ -186,20 +187,36 @@ def main():
     
     try:
         song_name =song_df_normalised[song_df_normalised['track_name'].str.contains(userinput)]['track_name'].tolist()[0]
+        #song_name = st.selectbox("choose your song", song_dataset)
     
     except IndexError:
         #print("Sorry!! We couldnt get any results for", userinput, " :( ")
-        string = "Sorry!! We couldnt get any results for"+ str(userinput) +" :("
+        string = "Sorry!! We couldnt get any results for "+ str(userinput) +" :("
         st.error(string)
         result = 'fail'
         accurate= 'no'
         user_review(username, userinput,result,accurate)
+        
     
     else:
         result='success'
-        st.text("song from dataset: "+song_name)
+        song_artist_list =[]
+        artist_list = []
+        song_name_list =song_df_normalised[song_df_normalised['track_name'].str.contains(userinput)]['track_name'].tolist()
+        artist_list = song_df_normalised[song_df_normalised['track_name'].str.contains(userinput)]['track_artist'].tolist()
         
-        artist_name = song_df_normalised[song_df_normalised['track_name'] == song_name]['track_artist'].tolist()[0]
+        #for i in range(len(song_name_list)):
+        #    song_artist_list.append(song_name_list[i]+" by "+artist_list[i])
+        
+        song_artist_list=[i +" by " + j for i, j in zip(song_name_list, artist_list)]
+        
+        option = st.selectbox("choose your song", song_artist_list)
+        x = song_artist_list.index(option)
+        song_name = song_name_list[x]
+        
+        st.text("song from dataset: "+song_name)
+        artist_name = artist_list[x]
+        #artist_name = song_df_normalised[song_df_normalised['track_name'] == song_name]['track_artist'].tolist()[0]
         st.text("artist name:"+artist_name)    
         
         genre = song_df_normalised[song_df_normalised['track_name'] == song_name]['playlist_genre'].tolist()[0]
@@ -219,14 +236,19 @@ def main():
         
             getsimilarsongs(song_name)
             output = display()
-            outputlist = list(set(output))
-        
-            for i in range(1,len(output)):
-                st.text(str(i)+" : "+output[i])
+            #outputlist = list(set(output))
+            if len(output) > 10:
+                n = 10
+            else:
+                n = len(output)
+                
+            for i in range(n):
+                c = i + 1
+                st.text(str(c)+" : "+output[i])
         
             clearlist()
         
-        songsearch = userinput
+        #songsearch = userinput
         accurate = st.radio("Were the recommendations accurate?",['yes','no'])
         if accurate == "yes":
             st.success("Awesome")

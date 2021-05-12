@@ -21,7 +21,7 @@ def getsimilarsongs(song_name):
     song_features = song_df_normalised.set_index("track_name")
     #song_features.drop("Unnamed: 0",axis=1,inplace=True)
     song_features.drop(['track_artist', 'lyrics', 'track_album_name',
-           'playlist_name', 'playlist_genre', 'playlist_subgenre','language'],axis=1,inplace=True)
+           'playlist_name', 'playlist_genre', 'playlist_subgenre','language','sentiment'],axis=1,inplace=True)
     #song_features.head()
     song_features_csr = csr_matrix(song_features.values)
     #model_nn = NearestNeighbors(metric='cosine',algorithm='brute')
@@ -45,7 +45,7 @@ def getartistsongs(artist_name,song_name):
     artist_data = song_df_normalised[song_df_normalised['track_artist'] == artist_name]
     artist_song_features=artist_data.set_index("track_name")
     artist_song_features.drop(['track_artist', 'lyrics', 'track_album_name',
-           'playlist_name', 'playlist_genre', 'playlist_subgenre','language'],axis=1,inplace=True)
+           'playlist_name', 'playlist_genre', 'playlist_subgenre','language','sentiment'],axis=1,inplace=True)
     #artist_song_features.head()
     #from scipy.sparse import csr_matrix
 
@@ -80,7 +80,7 @@ def getsongsgenre(genre,song_name):
     genre_data = song_df_normalised[song_df_normalised['playlist_genre'] == genre]
     genre_song_features=genre_data.set_index("track_name")
     genre_song_features.drop(['track_artist', 'lyrics', 'track_album_name',
-           'playlist_name', 'playlist_genre', 'playlist_subgenre','language'],axis=1,inplace=True)
+           'playlist_name', 'playlist_genre', 'playlist_subgenre','language','sentiment'],axis=1,inplace=True)
     #genre_song_features.head()
     #from scipy.sparse import csr_matrix
 
@@ -110,7 +110,7 @@ def getsongsubgenre(subgenre,song_name):
     subgenre_data = song_df_normalised[song_df_normalised['playlist_subgenre'] == subgenre]
     subgenre_song_features=subgenre_data.set_index("track_name")
     subgenre_song_features.drop(['track_artist', 'lyrics', 'track_album_name',
-           'playlist_name', 'playlist_genre', 'playlist_subgenre','language'],axis=1,inplace=True)
+           'playlist_name', 'playlist_genre', 'playlist_subgenre','language','sentiment'],axis=1,inplace=True)
     #subgenre_song_features.head()
     #from scipy.sparse import csr_matrix
 
@@ -237,14 +237,21 @@ def main():
             getsimilarsongs(song_name)
             output = display()
             #outputlist = list(set(output))
-            if len(output) > 10:
+            
+            artist_list2 =[]
+            for i in range(len(output)):
+                artist_list2.append(song_df_normalised[song_df_normalised['track_name'] == output[i]]['track_artist'].tolist()[0])
+            
+            song_artist_output=[i +" by " + j for i, j in zip(output, artist_list2)]
+            
+            if len(song_artist_output) > 10:
                 n = 10
             else:
-                n = len(output)
+                n = len(song_artist_output)
                 
             for i in range(n):
                 c = i + 1
-                st.text(str(c)+" : "+output[i])
+                st.text(str(c)+" : "+song_artist_output[i])
         
             clearlist()
         
@@ -263,4 +270,5 @@ def main():
         
 if __name__  == '__main__':
     main()
+
 

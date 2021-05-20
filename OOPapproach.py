@@ -150,14 +150,14 @@ def clearlist():
     recommended_song_list.clear()
 
 
-def user_review(username, songsearch,result,accurate):
-    import pandas as pd
-    #print(username, songsearch,result,accurate)
-    df = pd.read_csv("datasets/user-review.csv")
-    id = df.shape[0] + 1
-    df2 = pd.DataFrame({'id':[id],'user_name':[username], 'song_searched':[songsearch], 
-                        'result':[result],'accurate':[accurate]})
-    df = df.append(df2,ignore_index=True)
-    df.to_csv("datasets/user-review.csv",index=False)
-    text = "You're cool!!"
-    return text
+# def user_review(username, songsearch,result,accurate):
+#     import pandas as pd
+#     #print(username, songsearch,result,accurate)
+#     df = pd.read_csv("datasets/user-review.csv")
+#     id = df.shape[0] + 1
+#     df2 = pd.DataFrame({'id':[id],'user_name':[username], 'song_searched':[songsearch], 
+#                         'result':[result],'accurate':[accurate]})
+#     df = df.append(df2,ignore_index=True)
+#     df.to_csv("datasets/user-review.csv",index=False)
+#     text = "You're cool!!"
+#     return text

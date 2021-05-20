@@ -2,7 +2,7 @@
 """
 Created on Tue May  4 21:15:40 2021
 
-@author: Josh.
+@author: Jos.
 """
 
 import streamlit as st
@@ -38,7 +38,7 @@ def songrecommender():
     song_df_normalised = pd.read_csv("datasets/song_df_normalised.csv")
     
     try:
-        song_name =song_df_normalised[song_df_normalised['track_name'].str.contains(userinput)]['track_name'].tolist()[0]
+        song_name =song_df_normalised[song_df_normalised['song_artist'].str.contains(userinput)]['song_artist'].tolist()[0]
         #song_name = st.selectbox("choose your song", song_dataset)
     
     except IndexError:
@@ -54,8 +54,8 @@ def songrecommender():
         result='success'
         song_artist_list =[]
         artist_list = []
-        song_name_list =song_df_normalised[song_df_normalised['track_name'].str.contains(userinput)]['track_name'].tolist()
-        artist_list = song_df_normalised[song_df_normalised['track_name'].str.contains(userinput)]['track_artist'].tolist()
+        song_name_list =song_df_normalised[song_df_normalised['song_artist'].str.contains(userinput)]['track_name'].tolist()
+        artist_list = song_df_normalised[song_df_normalised['song_artist'].str.contains(userinput)]['track_artist'].tolist()
         
         #for i in range(len(song_name_list)):
         #    song_artist_list.append(song_name_list[i]+" by "+artist_list[i])

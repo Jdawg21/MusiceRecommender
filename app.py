@@ -24,19 +24,19 @@ def main():
     st.text(intro)
     username = st.text_input("Whats your name?")
     
-    if username == 'devtesterMARCauthenticcationPaSSworDLJJR':
-        st.info("Suppp")
-        df = pd.read_csv("datasets/user-review.csv")
-        def filedownload(df):
-            csv = df.to_csv(index=False)
-            b64 = base64.b64encode(csv.encode()).decode()
-            href = f'<a href="data:file/csv;base64,{b64}" download="user-review.csv">Download CSV File</a>'
-            return href
+#     if username == 'devtesterMARCauthenticcationPaSSworDLJJR':
+#         st.info("Suppp")
+#         df = pd.read_csv("datasets/user-review.csv")
+#         def filedownload(df):
+#             csv = df.to_csv(index=False)
+#             b64 = base64.b64encode(csv.encode()).decode()
+#             href = f'<a href="data:file/csv;base64,{b64}" download="user-review.csv">Download CSV File</a>'
+#             return href
         
-        st.markdown(filedownload(df), unsafe_allow_html=True)
+#         st.markdown(filedownload(df), unsafe_allow_html=True)
         
-    else:
-        st.text("Nice to meet you "+str(username))
+#     else:
+    st.text("Nice to meet you "+str(username))
     
 #   mood = st.text_input("How are you today "+str(name)+"?")
 #    score = SentimentIntensityAnalyzer().polarity_scores(mood)

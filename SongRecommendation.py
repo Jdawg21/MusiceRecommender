@@ -2,7 +2,7 @@
 """
 Created on Tue May  4 21:15:40 2021
 
-@author: Jos.
+@author: Josh.
 """
 
 import streamlit as st
@@ -12,9 +12,9 @@ import base64
 from nltk.sentiment.vader import  SentimentIntensityAnalyzer
 
 
-def songrecommender(username):
+def songrecommender():
 
-    mood = st.text_input("How are you today "+str(username)+"?")
+    mood = st.text_input("How are you today ?")
     
     score = SentimentIntensityAnalyzer().polarity_scores(mood)
     if score['compound'] >= 0.05:
@@ -45,9 +45,9 @@ def songrecommender(username):
         #print("Sorry!! We couldnt get any results for", userinput, " :( ")
         string = "Sorry!! We couldnt get any results for "+ str(userinput) +" :("
         st.error(string)
-        result = 'fail'
-        accurate= 'no'
-        user_review(username, userinput,result,accurate)
+        #result = 'fail'
+        #accurate= 'no'
+        #user_review(username, userinput,result,accurate)
         
     
     else:
@@ -71,10 +71,10 @@ def songrecommender(username):
         #artist_name = song_df_normalised[song_df_normalised['track_name'] == song_name]['track_artist'].tolist()[0]
         st.text("artist name:"+artist_name)    
         
-        genre = song_df_normalised[song_df_normalised['track_name'] == song_name]['playlist_genre'].tolist()[0]
+        genre = song_df_normalised[(song_df_normalised['track_name'] == song_name) & (song_df_normalised['track_artist'] == artist_name)]['playlist_genre'].tolist()[0]
         #st.text("genre of song:"+genre)
         
-        subgenre = song_df_normalised[song_df_normalised['track_name'] == song_name]['playlist_subgenre'].tolist()[0]
+        subgenre = song_df_normalised[(song_df_normalised['track_name'] == song_name) & (song_df_normalised['track_artist'] == artist_name)]['playlist_subgenre'].tolist()[0]
         #st.text("subgenre of song:"+subgenre)
         
         
@@ -136,8 +136,8 @@ def songrecommender(username):
             
         thankyou = st.button("THANK YOU!!")
         if thankyou:
-            final = user_review(username, userinput,result,accurate)
-            st.text(final)
+            #final = user_review(username, userinput,result,accurate)
+            st.text("You're cool!!")
      
 
 def main():

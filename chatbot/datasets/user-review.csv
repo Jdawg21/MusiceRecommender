@@ -1,0 +1,9 @@
+id,user_name,song_searched,result,accurate
+1,Sam Smith,fire on fire,success,yes
+2,Joshua,payphone,success,no
+3,Khalid,location,success,yes
+4,Ronnie,under pressure - remastered,success,no
+5,Olaf,heart on ice,success,yes
+6,Joshua,how do you sleep,success,yes
+7,John,footloose,fail,no
+8,John,we will rock you,success,no

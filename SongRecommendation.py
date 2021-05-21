@@ -1,8 +1,6 @@
 # -*- coding: utf-8 -*-
 """
 Created on Tue May  4 21:15:40 2021
-
-@author: Jos.
 """
 
 import streamlit as st
@@ -10,7 +8,9 @@ import pandas as pd
 from OOPapproach import *
 import base64
 from nltk.sentiment.vader import  SentimentIntensityAnalyzer
-
+import streamlit.components.v1 as components
+import nltk
+nltk.download('vader_lexicon')
 
 def songrecommender():
 
@@ -78,7 +78,11 @@ def songrecommender():
         #st.text("subgenre of song:"+subgenre)
         
         
-        recommend = st.button("click for receommendations ")
+        x = song_df_normalised[(song_df_normalised['track_name'] == song_name) & (song_df_normalised['track_artist'] == artist_name)]['links'].tolist()[0]
+        components.iframe(src="https://w.soundcloud.com/player/?url="+x+"&color=%23ff5500")
+        
+        
+        recommend = st.button("click for more: ")
         if recommend:
             getartistsongs(artist_name,song_name)
             

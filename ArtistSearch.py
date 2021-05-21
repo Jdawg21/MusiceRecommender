@@ -44,10 +44,13 @@ def artistsearch():
         
         n = len(artist_song_list)
         if n>10:
-            n=10
+            n=5
         for i in range(n):
             c = i + 1
-            st.text(str(c)+" : "+artist_song_list[i])    
+            st.text(str(c)+" : "+artist_song_list[i])
+            x = song_df_normalised[(song_df_normalised['track_name'] == artist_song_list[i]) & (song_df_normalised['track_artist'] == artist_name)]['links'].tolist()[0]
+            components.iframe(src="https://w.soundcloud.com/player/?url="+x+"&color=%23ff5500")
+
             
         artist_song_list.clear()
         

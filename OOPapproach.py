@@ -2,11 +2,14 @@
 """
 Created on Mon May  3 23:07:27 2021
 
+@author: Josh
 """
 
 import pandas as pd
 import numpy as np
 from scipy.sparse import csr_matrix
+from statistics import mode
+from statistics import StatisticsError
 import pickle
 
 
@@ -149,14 +152,51 @@ def clearlist():
     recommended_song_list.clear()
 
 
-def user_review(username, songsearch,result,accurate):
+def streamhistory(username, user_search,sentiment):
     import pandas as pd
+    from statistics import mode
+    from statistics import StatisticsError
     #print(username, songsearch,result,accurate)
-    df = pd.read_csv("datasets/user-review.csv")
-    id = df.shape[0] + 1
-    df2 = pd.DataFrame({'id':[id],'user_name':[username], 'song_searched':[songsearch], 
-                        'result':[result],'accurate':[accurate]})
-    df = df.append(df2,ignore_index=True)
-    df.to_csv("datasets/user-review.csv",index=False)
-    text = "You're cool!!"
-    return text
+    history = pd.read_csv("datasets/streaminghistory.csv")
+    #user_song = [user_search]
+    #user_sentiment = [sentiment]
+    
+    # update history for existing user
+    if username in history['user'].unique():
+        for i in range(history.shape[0]):
+            if history.at[i,'user'] == username:
+                song_list = history.at[i,'song_list']
+                song_list  = user_search  +","+ song_list
+                sentiment_list = history.at[i,'song_sentiment']
+                sentiment_list = sentiment +","+ sentiment_list     
+                history.at[i,'song_list'] = song_list
+                history.at[i,'song_sentiment'] = sentiment_list
+                #history.to_csv("datasets/user-review.csv",index=False)
+                history.to_csv("datasets/streaminghistory.csv",index=False)
+    
+    # create new record for a new user
+    if username not in history['user'].unique():
+        df2 = pd.DataFrame({'user':[username],'song_list':[user_search], 'song_sentiment':[sentiment]})
+        history = history.append(df2,ignore_index=True)
+        history.to_csv("datasets/streaminghistory.csv",index=False)
+    
+
+    
+    sentiment_history =history[history['user'] == username]['song_sentiment'].tolist()[0]
+    sentiment_history = sentiment_history.split(",")
+    
+    try:
+        # calculate sentiment based on last 3 songs streamed
+        mode(sentiment_history[:3])
+    except StatisticsError:
+        print('Positive')
+        sentiment_history = 'Positive'
+    else:
+        print(mode(sentiment_history[:3]))
+        sentiment_history =  mode(sentiment_history[:3])
+    
+    return sentiment_history
+    
+    
+    #text = "You're cool!!"
+    #return text

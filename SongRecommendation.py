@@ -1,6 +1,8 @@
 # -*- coding: utf-8 -*-
 """
 Created on Tue May  4 21:15:40 2021
+
+@author: Jos.
 """
 
 import streamlit as st
@@ -12,25 +14,25 @@ import streamlit.components.v1 as components
 import nltk
 nltk.download('vader_lexicon')
 
-def songrecommender():
+def songrecommender(username):
 
-    mood = st.text_input("How are you today ?")
+#    mood = st.text_input("How are you today ?")
     
-    score = SentimentIntensityAnalyzer().polarity_scores(mood)
-    if score['compound'] >= 0.05:
-            st.success('Positive Sentiment Detected')
-            sentiment = 'Positive'
-    elif score['compound'] > -0.05 and score['compound'] < 0.05:
-            st.info('Neutral Sentiment Detected')
-            sentiment = 'Neutral'
-    elif score['compound'] <= -0.05:
-            st.error('Negative Sentiment Detected')
-            sentiment = 'Negative'    
+#    score = SentimentIntensityAnalyzer().polarity_scores(mood)
+#    if score['compound'] >= 0.05:
+#            st.success('Positive Sentiment Detected')
+#            sentiment = 'Positive'
+#    elif score['compound'] > -0.05 and score['compound'] < 0.05:
+#            st.info('Neutral Sentiment Detected')
+#            sentiment = 'Neutral'
+#    elif score['compound'] <= -0.05:
+#            st.error('Negative Sentiment Detected')
+#            sentiment = 'Negative'    
 
 
 
     
-    userinput = st.text_input("Enter a song you would like to get recommendations for: ")
+    userinput = st.text_input("Enter a song you would like to get recommendations for: "+str(username))
     userinput = userinput.lower()
     st.text("your song is: "+userinput)
     
@@ -64,6 +66,7 @@ def songrecommender():
         
         option = st.selectbox("choose your song", song_artist_list)
         x = song_artist_list.index(option)
+        user_search = song_artist_list[x]
         song_name = song_name_list[x]
         
         st.text("song from dataset: "+song_name)
@@ -78,12 +81,18 @@ def songrecommender():
         #st.text("subgenre of song:"+subgenre)
         
         
-        x = song_df_normalised[(song_df_normalised['track_name'] == song_name) & (song_df_normalised['track_artist'] == artist_name)]['links'].tolist()[0]
-        components.iframe(src="https://w.soundcloud.com/player/?url="+x+"&color=%23ff5500")
+        sentiment = song_df_normalised[(song_df_normalised['track_name'] == song_name) & (song_df_normalised['track_artist'] == artist_name)]['sentiment'].tolist()[0]
+        st.info(sentiment)
+        
+        songlink = song_df_normalised[(song_df_normalised['track_name'] == song_name) & (song_df_normalised['track_artist'] == artist_name)]['links'].tolist()[0]
+        components.iframe(src="https://w.soundcloud.com/player/?url="+songlink+"&color=%23ff5500")
         
         
         recommend = st.button("click for more: ")
         if recommend:
+            
+            sentiment = streamhistory(username, user_search,sentiment)
+            
             getartistsongs(artist_name,song_name)
             
             
@@ -130,13 +139,14 @@ def songrecommender():
                 st.text(str(c)+" : "+song_artist_output[i])
         
             clearlist()
+            #streamhistory(username, user_search,sentiment)
         
         #songsearch = userinput
-        accurate = st.radio("Were the recommendations accurate?",['yes','no'])
-        if accurate == "yes":
-            st.success("Awesome")
-        if accurate == 'no':
-            st.error("Oh no!! We're sorry to hear that")
+        #accurate = st.radio("Were the recommendations accurate?",['yes','no'])
+        #if accurate == "yes":
+        #    st.success("Awesome")
+        #if accurate == 'no':
+        #    st.error("Oh no!! We're sorry to hear that")
             
         thankyou = st.button("THANK YOU!!")
         if thankyou:

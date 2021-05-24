@@ -53,18 +53,21 @@ def main():
     
   
     option = st.selectbox("What would you like to do?", 
-                          ['Search Artist','Play Music','Browse by genre'])
+                          ['Search Artist','Play Music','Browse by genre','get playlist'])
     
     st.text(option)
     #gorecommend = st.button("go: ")
     #if gorecommend:
     if option == 'Play Music':
-        songrecommender()
+        songrecommender(username)
     if option == 'Search Artist':
         artistsearch()        
      
     if option == 'Browse by genre':
         genresearch()
+    
+    if option == 'get playlist':
+        personalplaylist(username)
     
   
     

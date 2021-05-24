@@ -20,15 +20,28 @@ def personalplaylist(username):
     
     
     # in case user is new, then we dont let them access this feature until they serach for a song
-    try:
+#    try:
+#        sentiment_history =history[history['user'] == username]['song_sentiment'].tolist()[0]
+        
+#    except IndexError:
+#        st.info("please play a few songs before accessing this feature")
+#    else:
+#        sentiment_history = sentiment_history.split(",")    
+    
+    
+#        try:
+#            mode(sentiment_history)
+#        except StatisticsError:
+#            print('Positive')
+#            sentiment = 'Positive'
+#        else:
+#            print(mode(sentiment_history))
+#            sentiment =  mode(sentiment_history)
+    
+    
+    if username in history['user'].unique():
         sentiment_history =history[history['user'] == username]['song_sentiment'].tolist()[0]
         
-    except IndexError:
-        st.info("please play a few songs before accessing this feature")
-    else:
-        sentiment_history = sentiment_history.split(",")    
-    
-    
         try:
             mode(sentiment_history)
         except StatisticsError:
@@ -36,15 +49,15 @@ def personalplaylist(username):
             sentiment = 'Positive'
         else:
             print(mode(sentiment_history))
-            sentiment =  mode(sentiment_history)
-    
-    
-        if username in history['user'].unique():
-            for i in range(history.shape[0]):
-                if history.at[i,'user'] == username:
-                    song_artist_list = history.at[i,'song_list']
-                    song_artist_list = song_artist_list.split(',')
-                    
+            sentiment =  mode(sentiment_history)            
+            
+        
+        
+        for i in range(history.shape[0]):
+            if history.at[i,'user'] == username:
+                song_artist_list = history.at[i,'song_list']
+                song_artist_list = song_artist_list.split(',')
+                
         song_artist_list_freq = []
         for w in song_artist_list:
             song_artist_list_freq.append(song_artist_list.count(w))
@@ -127,8 +140,9 @@ def personalplaylist(username):
             st.text(str(c)+" : "+playlist[i])
             x = song_df_normalised[(song_df_normalised['song_artist'] == playlist[i])]['links'].tolist()[0]
             components.iframe(src="https://w.soundcloud.com/player/?url="+x+"&color=%23ff5500")
-        
-        
+            
+    else:
+        st.info("play a few songs before you can access this feature")
         
         
 def main():
